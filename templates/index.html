@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Probabilitas Binomial</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container" id="formContainer">
+        <h1>Kalkulator Distribusi Probabilitas Binomial</h1>
+        <div id="examples">
+            <span>Coba contoh berikut: </span>
+            <a href="javascript:void(0);" onclick="setExample()">Contoh Studi Kasus</a>
+        </div>
+    
+        <!-- Tempat untuk menampilkan Studi Kasus -->
+        <div id="studyCase" class="study-case" style="display: none;">
+            <h2>Studi Kasus:</h2>
+            <p id="studyCaseContent"></p>
+        </div>
+    
+        <form id="binomialForm">
+            <label for="n">Jumlah Percobaan (n):</label>
+            <input type="number" id="n" name="n" required>
+            <label for="p">Probabilitas Keberhasilan (p):</label>
+            <input type="number" id="p" name="p" step="0.01" required>
+            <label for="k">Jumlah Keberhasilan (k):</label>
+            <input type="number" id="k" name="k" required>
+            <button type="submit">Hitung Probabilitas</button>
+        </form>
+    </div>
+    
+    <!-- Separator antara form dan hasil perhitungan -->
+    <div class="separator" id="separator"></div>
+    <!-- Bagian untuk menampilkan hasil perhitungan -->
+    <div class="container result-container" id="resultContainer" style="display: none;">
+        <h1>Hasil Perhitungan</h1>
+        <div id="output"></div> <!-- Gabungkan hasil dan langkah-langkah di sini -->
+        <button class="goBackButton" onclick="goBack()">Kembali Hitung</button>
+    </div>
+    <script>
+        document.getElementById('binomialForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/calculate', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            const outputDiv = document.getElementById('output');  // Gabungkan hasil dan langkah di sini
+            const formContainer = document.getElementById('formContainer');
+            const resultContainer = document.getElementById('resultContainer');
+            const separator = document.getElementById('separator');
+            if (data.result !== undefined) {
+                // Menampilkan hasil perhitungan dengan presisi penuh tanpa pembatasan angka desimal
+                let resultFormatted = data.result.toString();
+                // Menghapus angka nol di belakang desimal jika ada
+                resultFormatted = resultFormatted.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.$/, ''); // Menghapus angka nol di belakang koma
+                const n = document.getElementById('n').value;
+                const p = document.getElementById('p').value;
+                const k = document.getElementById('k').value;
+                outputDiv.innerHTML = `
+                    <p class="probability">Probabilitas Binomial untuk:</p>
+                    <p class="probability center-text">n = ${n}, p = ${p}, k = ${k}</p>
+                    <p> <strong> $$P(X = ${k}) = ${resultFormatted}$$</strong></p>
+                    ${data.steps.map(step => `<p>${step}</p>`).join('')}
+                `;
+                // Menampilkan hasil perhitungan di bawah form
+                resultContainer.style.display = 'block';
+                separator.style.display = 'block';
+                MathJax.typeset(); // Render MathJax setelah konten baru dimasukkan
+                
+                // Scroll otomatis ke bagian hasil perhitungan
+                window.scrollTo({
+                    top: resultContainer.offsetTop,
+                    behavior: 'smooth'
+                });
+            } else {
+                outputDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                resultContainer.style.display = 'none'; // Sembunyikan hasil jika terjadi error
+                separator.style.display = 'none'; // Sembunyikan separator jika terjadi error
+            }
+        });
+
+        function setExample() {
+            // Menampilkan studi kasus
+            const studyCaseContent = document.getElementById('studyCaseContent');
+            const studyCaseDiv = document.getElementById('studyCase');
+            studyCaseContent.innerHTML = "Sebuah lembaga transportasi melakukan penelitian terhadap tingkat keselamatan dalam kecelakaan mobil di wilayah tertentu. Berdasarkan data historis, probabilitas seseorang selamat dari kecelakaan mobil (menggunakan sabuk pengaman) adalah 85%. Dalam satu kecelakaan mobil yang melibatkan 5 orang penumpang.";
+
+            // Menampilkan studi kasus yang dipilih
+            studyCaseDiv.style.display = 'block';
+
+            // Mengubah label input sesuai studi kasus
+            document.querySelector('label[for="n"]').textContent = 'Jumlah Penumpang Terlibat (n):';
+            document.querySelector('label[for="k"]').textContent = 'Jumlah Penumpang Selamat (k):';
+
+            // Mengisi input dengan nilai yang relevan untuk studi kasus ini
+            document.getElementById('n').value = 5;
+            document.getElementById('p').value = 0.85;
+            document.getElementById('k').value = 3;
+        }
+
+        function goBack() {
+            // Menyembunyikan studi kasus
+            const studyCaseDiv = document.getElementById('studyCase');
+            studyCaseDiv.style.display = 'none';
+
+            // Mengosongkan kolom input
+            document.getElementById('n').value = '';
+            document.getElementById('p').value = '';
+            document.getElementById('k').value = '';
+
+            // Mengubah label kembali ke label semula
+            document.querySelector('label[for="n"]').textContent = 'Jumlah Percobaan (n):';
+            document.querySelector('label[for="k"]').textContent = 'Jumlah Keberhasilan (k):';
+
+            // Menampilkan kembali form
+            const formContainer = document.getElementById('formContainer');
+            const resultContainer = document.getElementById('resultContainer');
+            const separator = document.getElementById('separator');
+            formContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            separator.style.display = 'none';
+        }
+
+    </script>
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Distribusi Probabilitas Binomial. Dega Megananda Putra - 301220060.</p>
+    </footer>    
+</body>
+</html>

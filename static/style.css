@@ -1,0 +1,98 @@
+html, body {
+    height: 100%; /* Memastikan bahwa HTML dan body memiliki tinggi penuh */
+    margin: 0;    /* Menghilangkan margin default */
+    padding: 0;   /* Menghilangkan padding default */
+    background: linear-gradient(135deg, #F6EA41, #F048C6); /* Latar belakang gradien */
+    background-attachment: fixed; /* Membuat gradien tetap di latar belakang dan tidak bergerak saat digulir */
+    font-family: Arial, sans-serif; /* Mengembalikan font ke semula */
+}
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1; /* Menempatkan konten lebih tinggi dari latar belakang */
+}
+h1 {
+    color: #000000;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+label {
+    text-align: left;
+    color: #000000;
+}
+input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+button {
+    padding: 10px;
+    font-size: 1rem;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #218838;
+}
+.separator {
+    border-top: 0px solid transparent; /* Membuat garis separator tidak terlihat */
+    margin: 2px 0;
+}
+/* Bagian output */
+#output {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #000000; /* Warna teks yang sesuai dengan link contoh */
+    text-align: left; /* Menambahkan pengaturan teks rata kiri untuk output */
+}
+#output p {
+    margin-bottom: 15px;
+}
+/* Styling untuk probabilitas pertama agar tetap di tengah */
+#output .probability {
+    text-align: center; /* Probabilitas pertama tetap di tengah */
+    font-weight: bold; /* Membuat teks probabilitas lebih terlihat */
+}
+/* Styling untuk rumus agar lebih terlihat */
+#output .math {
+    text-align: center; /* Menjaga rumus tetap di tengah */
+    font-weight: bold; /* Rumus menjadi bold */
+}
+/* Footer */
+footer {
+    background-color: #343a40; /* Warna latar belakang gelap */
+    color: white; /* Warna teks putih */
+    text-align: center; /* Teks di tengah */
+    padding: 20px 0; /* Jarak atas dan bawah */
+    font-size: 1rem; /* Ukuran font */
+    margin-top: 30px; /* Jarak atas dari konten sebelumnya */
+}
+footer p {
+    margin: 0; /* Menghilangkan margin */
+}
+/* Styling untuk link contoh */
+#examples {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: #000000; /* Warna teks untuk link contoh */
+}
+#examples a {
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+#examples a:hover {
+    text-decoration: underline;
+}
